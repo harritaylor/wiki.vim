@@ -76,6 +76,27 @@ endfunction
 
 "}}}1
 
+function! wiki#fzf#todos abort "{{{1
+  if !exists('*fzf#run')
+    echo 'fzf must be installed for this to work.'
+    return
+  endif
+
+  let l:todo = get(g:, 'wiki_list_todos', ['TODO', 'DONE'])[0]
+  let l:search = 'rg --line-number --no-heading --smart-case --'
+        \ . l:todo .
+        \ . ' | sed "s/:[[:space:]]*[*|-} ' . l:todo . '[:]* /: /g"'
+
+  call fzf#run(fzf#wrap({
+        \ 'source': l:search,
+        \ 'dir': wiki#get_root(),
+        \ 'sink': funcref('s:accept_todo')
+        \}))
+
+endfunction
+
+" }}}1
+
 function! s:accept_page(line) abort "{{{1
   execute 'edit ' . wiki#get_root() . a:line
 endfunction
@@ -105,6 +126,14 @@ endfunction
 " }}}1
 function! s:accept_toc_entry(line) abort "{{{1
   let l:lnum = split(a:line, '|')[0]
+  execute l:lnum
+endfunction
+
+"}}}1
+
+function s:accept_todo(line) abort "{{{1
+  let [l:file, l:lnum; _] = split(a:line, ':')
+  execute 'edit ' . l:file
   execute l:lnum
 endfunction
 

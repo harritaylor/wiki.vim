@@ -71,6 +71,7 @@ command! WikiJournal  call wiki#journal#make_note()
 command! CtrlPWiki    call ctrlp#init(ctrlp#wiki#id())
 command! WikiFzfPages call wiki#fzf#pages()
 command! WikiFzfTags  call wiki#fzf#tags()
+command! WikiFzfTodos call wiki#fzf#todos()
 
 " Initialize mappings
 nnoremap <silent> <plug>(wiki-index)     :WikiIndex<cr>
@@ -79,6 +80,7 @@ nnoremap <silent> <plug>(wiki-journal)   :WikiJournal<cr>
 nnoremap <silent> <plug>(wiki-reload)    :WikiReload<cr>
 nnoremap <silent> <plug>(wiki-fzf-pages) :WikiFzfPages<cr>
 nnoremap <silent> <plug>(wiki-fzf-tags)  :WikiFzfTags<cr>
+nnoremap <silent> <plug>(wiki-fzf-todos) :WikiFzfTodos<cr>
 
 " Apply default mappings
 let s:mappings = index(['all', 'global'], g:wiki_mappings_use_defaults) >= 0
@@ -87,6 +89,7 @@ let s:mappings = index(['all', 'global'], g:wiki_mappings_use_defaults) >= 0
       \ '<plug>(wiki-open)' : '<leader>wn',
       \ '<plug>(wiki-journal)' : '<leader>w<leader>w',
       \ '<plug>(wiki-reload)' : '<leader>wx',
+      \ '<plug>(wiki-fzf-todos)' : '<leader>wtd',
       \} : {}
 call extend(s:mappings, get(g:, 'wiki_mappings_global', {}))
 call wiki#init#apply_mappings_from_dict(s:mappings, '')
