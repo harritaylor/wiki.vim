@@ -76,21 +76,22 @@ endfunction
 
 "}}}1
 
-function! wiki#fzf#todos abort "{{{1
+function! wiki#fzf#todos() abort "{{{1
   if !exists('*fzf#run')
     echo 'fzf must be installed for this to work.'
     return
   endif
 
-  let l:todo = get(g:, 'wiki_list_todos', ['TODO', 'DONE'])[0]
-  let l:search = 'rg --line-number --no-heading --smart-case --'
-        \ . l:todo .
-        \ . ' | sed "s/:[[:space:]]*[*|-} ' . l:todo . '[:]* /: /g"'
+  let l:todostring = get(g:, 'wiki_list_todos', ['TODO', 'DONE'])[0]
+  let l:search = 'rg --line-number --no-heading --smart-case --' . 
+        \ l:todostring .
+        \ ' | sed "s/:[[:space:]]*[*|-} ' . l:todostring . '[:]* /: /g"'
 
   call fzf#run(fzf#wrap({
         \ 'source': l:search,
         \ 'dir': wiki#get_root(),
-        \ 'sink': funcref('s:accept_todo')
+        \ 'sink': funcref('s:accept_todo'),
+        \ 'options': '--prompt "WikiTodos> "'
         \}))
 
 endfunction
